@@ -15,11 +15,11 @@ class AngelDiagnostics extends AngelPlugin {
     Logger.root.onRecord.listen((LogRecord rec) async {
       if (!await _logFile.exists()) await _logFile.create(recursive: true);
 
-      await _logFile.writeAsStringSync(
-          "${rec.level.name}: ${rec.time}: ${rec.message}\n",
-          mode: FileMode.APPEND);
-
       if (rec.level != Level.FINE) {
+        await _logFile.writeAsStringSync(
+            "${rec.level.name}: ${rec.time}: ${rec.message}\n",
+            mode: FileMode.APPEND);
+        
         chooseColor(_pen.reset(), rec.level);
         _pen("${rec.level.name}: ${rec.time}: ${rec.message}");
         _pen();
