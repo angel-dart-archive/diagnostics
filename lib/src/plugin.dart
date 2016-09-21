@@ -18,9 +18,12 @@ class AngelDiagnostics extends AngelPlugin {
       await _logFile.writeAsStringSync(
           "${rec.level.name}: ${rec.time}: ${rec.message}\n",
           mode: FileMode.APPEND);
-      chooseColor(_pen.reset(), rec.level);
-      _pen("${rec.level.name}: ${rec.time}: ${rec.message}");
-      _pen();
+
+      if (rec.level != Level.FINE) {
+        chooseColor(_pen.reset(), rec.level);
+        _pen("${rec.level.name}: ${rec.time}: ${rec.message}");
+        _pen();
+      }
     });
   }
 
@@ -38,8 +41,6 @@ class AngelDiagnostics extends AngelPlugin {
       pen.yellow();
     else if (level == Level.INFO)
       pen.magenta();
-    else if (level == Level.FINE)
-      pen.cyan();
     else if (level == Level.FINER)
       pen.blue();
     else if (level == Level.FINEST)
