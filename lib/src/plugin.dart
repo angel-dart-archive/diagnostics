@@ -19,7 +19,7 @@ class AngelDiagnostics extends AngelPlugin {
         await _logFile.writeAsStringSync(
             "${rec.level.name}: ${rec.time}: ${rec.message}\n",
             mode: FileMode.APPEND);
-        
+
         chooseColor(_pen.reset(), rec.level);
         _pen("${rec.level.name}: ${rec.time}: ${rec.message}");
         _pen();

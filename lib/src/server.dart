@@ -10,8 +10,10 @@ class DiagnosticsServer extends Angel {
   File logFile;
 
   DiagnosticsServer(this.inner, this.logFile) {
+    var oldHandler = inner.errorHandler;
     inner.onError((e, req, res) async {
       _logger.warning("Angel HTTP Exception: $e (errors: ${e.errors})", e);
+      await oldHandler(e, req, res);
     });
 
     inner.fatalErrorStream.listen((data) {

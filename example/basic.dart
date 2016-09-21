@@ -18,6 +18,10 @@ Future<Angel> createServer() async {
       (req, ResponseContext res) =>
           res.redirect("https://en.wikipedia.org/favicon.ico", code: 302));
 
+  app.get("/error", () {
+    throw new AngelHttpException.Conflict();
+  });
+
   app.get("/wait", () => new Future.delayed(new Duration(seconds: 10)).then((_) => "10 second wait time"));
 
   app.after.add((RequestContext req) {
