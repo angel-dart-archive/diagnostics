@@ -22,7 +22,10 @@ Future<Angel> createServer() async {
     throw new AngelHttpException.Conflict();
   });
 
-  app.get("/wait", () => new Future.delayed(new Duration(seconds: 10)).then((_) => "10 second wait time"));
+  app.get(
+      "/wait",
+      () => new Future.delayed(new Duration(seconds: 10))
+          .then((_) => "10 second wait time"));
 
   app.after.add((RequestContext req) {
     throw new AngelHttpException.NotFound(

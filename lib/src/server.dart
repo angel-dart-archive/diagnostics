@@ -26,6 +26,8 @@ class DiagnosticsServer extends Angel {
       } else {
         _logger.severe("Unhandled exception occurred - $e", e, st);
         if (st != null) _logger.severe("\n$st");
+        stderr.writeln(e);
+        stderr.writeln(st);
       }
     });
   }
@@ -48,6 +50,8 @@ class DiagnosticsServer extends Angel {
             "Unhandled exception occurred - ${request.method} ${request.uri}",
             e,
             st);
+        stderr.writeln(e);
+        stderr.writeln(st);
       }
     }
   }
