@@ -29,7 +29,7 @@ Future<Angel> createServer() async {
 
   app.after.add((RequestContext req) {
     throw new AngelHttpException.NotFound(
-        message: "No file exists at '${req.underlyingRequest.uri}'.");
+        message: "No file exists at '${req.io.uri}'.");
   });
 
   return app;

@@ -17,14 +17,15 @@ class DiagnosticsServer extends Angel {
     });
 
     inner.fatalErrorStream.listen((data) {
-      var e = data["error"], st = data["stack"];
+      var e = data.error, st = data.stack;
 
       if (e is AngelHttpException) {
         _logger.warning("HTTP Exception: $e", e, st);
 
         if (st != null) _logger.warning("\n$st");
       } else {
-        _logger.severe("Unhandled exception occurred - $e", e, st);
+        final msg = e is Exception ? e.message : e.toString();
+        _logger.severe("Unhandled exception occurred - $msg", e, st);
         if (st != null) _logger.severe("\n$st");
         stderr.writeln(e);
         stderr.writeln(st);
