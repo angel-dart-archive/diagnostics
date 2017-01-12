@@ -8,7 +8,7 @@ environment:
 dependencies:
   angel_framework: ^1.0.0-dev
   console: ^2.0.0
-  fnx_profiler:
+  fnx_profiler: ^0.9.1
   logging: ^0.11.0
 dev_dependencies:
   http: ^0.11.0
