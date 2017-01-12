@@ -13,7 +13,7 @@ main() async {
 }
 
 Future<Angel> createServer() async {
-  var app = new Angel()..before.add(profile('wtf'));
+  var app = new Angel();
 
   app.get("/", "index");
 
@@ -34,7 +34,7 @@ Future<Angel> createServer() async {
 
   app.get('/general-error', () => throw new Exception('I hate everything'));
 
-  app.get(
+  app.chain(profile('10-second-delay')).get(
       "/wait",
       () => new Future.delayed(new Duration(seconds: 10))
           .then((_) => "10 second wait time"));
