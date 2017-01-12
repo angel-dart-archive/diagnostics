@@ -23,7 +23,7 @@ AngelConfigurer profileRequests({bool force: false}) {
     if (app.isProduction && !force) return;
 
     app.before.insert(0, (RequestContext req, res) async {
-      // clearProfiler();
+      clearAllStats();
 
       var profiler = openRootProfiler('${req.method} ${req.uri}');
       var c = app.properties['__profileCompleter'] = new Completer();
