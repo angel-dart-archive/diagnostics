@@ -75,4 +75,4 @@ fabric.properties
 
 # Files and directories created by pub
 
-/example/log.txt
+log.txt

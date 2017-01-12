@@ -4,8 +4,13 @@ import 'package:angel_diagnostics/angel_diagnostics.dart';
 import 'package:angel_framework/angel_framework.dart';
 
 main() async {
-  var app = new DiagnosticsServer(await createServer(), new File("log.txt"));
-  await app.startServer();
+  var app = await createServer();
+
+  // Add diagnostics AFTER everything else. Ideally, just before startup.
+  await app.configure(logRequests(new File('log.txt')));
+
+  var server = await app.startServer();
+  print('Listening at http://${server.address.address}:${server.port}');
 }
 
 Future<Angel> createServer() async {
@@ -19,8 +24,10 @@ Future<Angel> createServer() async {
           res.redirect("https://en.wikipedia.org/favicon.ico", code: 302));
 
   app.get("/error", () {
-    throw new AngelHttpException.Conflict();
+    throw new AngelHttpException.conflict();
   });
+
+  app.get('/general-error', () => throw new Exception('I hate everything'));
 
   app.get(
       "/wait",
@@ -28,7 +35,7 @@ Future<Angel> createServer() async {
           .then((_) => "10 second wait time"));
 
   app.after.add((RequestContext req) {
-    throw new AngelHttpException.NotFound(
+    throw new AngelHttpException.notFound(
         message: "No file exists at '${req.io.uri}'.");
   });
 

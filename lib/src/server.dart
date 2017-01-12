@@ -4,6 +4,7 @@ import 'package:angel_framework/angel_framework.dart';
 import 'package:logging/logging.dart';
 import 'plugin.dart';
 
+@deprecated
 class DiagnosticsServer extends Angel {
   Logger _logger;
   Angel inner;
