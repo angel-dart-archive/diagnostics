@@ -1,6 +1,6 @@
 name: angel_diagnostics
 description: Support for diagnostics within the Angel framework.
-version: 1.0.0-dev+6
+version: 1.0.0
 author: Tobe O <thosakwe@gmail.com>
 homepage: https://github.com/angel-dart/angel_diagnostics
 environment:
