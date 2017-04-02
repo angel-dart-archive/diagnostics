@@ -3,7 +3,14 @@ Support for diagnostics within the Angel framework.
 
 For accuracy, **these plugins must be called after all other plugins
 are configured**. The best way to ensure this would be to call it
-*right before server startup*.
+*right before server startup*:
+
+```dart
+app.justBeforeStart.addAll([
+  logRequests(...),
+  profileRequests(...)
+]);
+```
 
 # Logging Requests
 `logRequests`
