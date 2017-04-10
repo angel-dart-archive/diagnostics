@@ -4,6 +4,7 @@ import 'package:angel_framework/angel_framework.dart';
 import 'package:console/console.dart';
 import 'package:logging/logging.dart';
 
+/// Use [logRequests] instead.
 @deprecated
 class AngelDiagnostics extends AngelPlugin {
   final File _logFile;

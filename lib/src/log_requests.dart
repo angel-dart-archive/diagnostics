@@ -4,25 +4,30 @@ import 'package:console/console.dart';
 import 'package:logging/logging.dart';
 
 /// Logs requests, responses and errors to the given [logFile].
-AngelPlugin logRequests(File logFile) => new _RequestLogger(logFile);
+///
+/// To avoid logging to a file, set [logFile] to `null` (default);
+AngelPlugin logRequests([File logFile]) => new _RequestLogger(logFile);
 
 class _RequestLogger extends AngelPlugin {
   final File _logFile;
   final Logger _logger = new Logger("Angel");
   TextPen _pen = new TextPen();
 
-  _RequestLogger(this._logFile);
+  _RequestLogger([this._logFile]);
 
   call(Angel app) async {
     Logger.root.level = Level.ALL;
 
     Logger.root.onRecord.listen((LogRecord rec) async {
-      if (!await _logFile.exists()) await _logFile.create(recursive: true);
+      if (_logFile != null && !await _logFile.exists())
+        await _logFile.create(recursive: true);
 
       if (rec.level != Level.FINE) {
-        await _logFile.writeAsStringSync(
-            "${rec.level.name}: ${rec.time}: ${rec.message}\n",
-            mode: FileMode.APPEND);
+        if (_logFile != null) {
+          await _logFile.writeAsStringSync(
+              "${rec.level.name}: ${rec.time}: ${rec.message}\n",
+              mode: FileMode.APPEND);
+        }
 
         chooseColor(_pen.reset(), rec.level);
         _pen("${rec.level.name}: ${rec.time}: ${rec.message}");
@@ -33,7 +38,8 @@ class _RequestLogger extends AngelPlugin {
     app.container.singleton(_logger);
 
     var oldHandler = app.errorHandler;
-    app.onError((e, req, res) async {
+
+    app.errorHandler = (e, req, res) async {
       _logger.warning(
           "${req.uri}: Angel HTTP Exception: $e (errors: ${e.errors})", e);
 
@@ -41,7 +47,7 @@ class _RequestLogger extends AngelPlugin {
         req.properties['__stopwatch'].stop();
 
       await oldHandler(e, req, res);
-    });
+    };
 
     app.fatalErrorStream.listen((data) {
       var e = data.error, st = data.stack;
@@ -51,7 +57,7 @@ class _RequestLogger extends AngelPlugin {
 
         if (st != null) _logger.warning("\n$st");
       } else {
-        final msg = e is Exception ? e.message : e.toString();
+        final msg = e.toString();
         _logger.severe(
             "${data.request?.uri}: Unhandled exception occurred - $msg", e, st);
         if (st != null) _logger.severe("\n$st");

@@ -15,8 +15,8 @@ app.justBeforeStart.addAll([
 # Logging Requests
 `logRequests`
 
-This plug-in lets you log requests, responses and errors to a log
-file, and also displays how much time (in milliseconds) it took to
+This plug-in lets you log requests, responses and errors (optionally to a log
+file), and also displays how much time (in milliseconds) it took to
 handle a request.
 
 # Profiler
