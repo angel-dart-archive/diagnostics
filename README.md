@@ -1,5 +1,5 @@
 # diagnostics
-Support for diagnostics within the Angel framework.
+Support for logging and diagnostics within the Angel framework.
 
 For accuracy, **these plugins must be called after all other plugins
 are configured**. The best way to ensure this would be to call it
