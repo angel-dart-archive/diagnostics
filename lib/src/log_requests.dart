@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:angel_framework/angel_framework.dart';
 import 'package:console/console.dart';
@@ -10,27 +11,28 @@ AngelPlugin logRequests([File logFile]) => new _RequestLogger(logFile);
 
 class _RequestLogger extends AngelPlugin {
   final File _logFile;
-  final Logger _logger = new Logger("Angel");
+  final Logger _logger = new Logger("angel_diagnostics");
   TextPen _pen = new TextPen();
 
   _RequestLogger([this._logFile]);
 
   call(Angel app) async {
+    StreamSubscription<LogRecord> sub;
     Logger.root.level = Level.ALL;
 
-    Logger.root.onRecord.listen((LogRecord rec) async {
+    sub = Logger.root.onRecord.listen((LogRecord rec) async {
       if (_logFile != null && !await _logFile.exists())
         await _logFile.create(recursive: true);
 
       if (rec.level != Level.FINE) {
         if (_logFile != null) {
           await _logFile.writeAsStringSync(
-              "${rec.level.name}: ${rec.time}: ${rec.message}\n",
+              "${rec.loggerName} ${rec.level.name}: ${rec.time}: ${rec.message}\n",
               mode: FileMode.APPEND);
         }
 
         chooseColor(_pen.reset(), rec.level);
-        _pen("${rec.level.name}: ${rec.time}: ${rec.message}");
+        _pen("${rec.loggerName} ${rec.level.name}: ${rec.time}: ${rec.message}");
         _pen();
       }
     });
@@ -77,9 +79,12 @@ class _RequestLogger extends AngelPlugin {
         if (req.properties.containsKey('__stopwatch')) {
           Stopwatch sw = req.__stopwatch..stop();
           _logger.info(
-              "${res.statusCode} ${req.method} ${req.uri} (${sw.elapsedMilliseconds} ms)");
+              "${_logger.name} ${res.statusCode} ${req.method} ${req.uri} (${sw.elapsedMilliseconds} ms)");
         }
-      });
+      })
+    ..justBeforeStop.add((_) async {
+      sub?.cancel();
+    });
   }
 
   void chooseColor(TextPen pen, Level level) {

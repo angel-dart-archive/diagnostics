@@ -19,6 +19,8 @@ This plug-in lets you log requests, responses and errors (optionally to a log
 file), and also displays how much time (in milliseconds) it took to
 handle a request.
 
+It also injects a `Logger` singleton into your application.
+
 # Profiler
 `profileRequests`
 
