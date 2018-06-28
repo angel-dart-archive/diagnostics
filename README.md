@@ -1,3 +1,11 @@
+# DEPRECATED IN RECENT ANGEL VERSIONS
+If you're using Angel `1.1.0-alpha` or later, then instead of using this package,
+simply set `app.logger` to an instance of `Logger` (from `package:logging`), and listen
+to `Logger.onRecord`.
+
+For those migrating from previous Angel versions, check out the official migration guide:
+https://angel-dart.gitbook.io/angel/1.1.0-migration-guide
+
 # diagnostics
 Support for logging and diagnostics within the Angel framework.
 
